@@ -28,15 +28,22 @@ def preview():
     qr.make()
     img_qr = qr.make_image()
 
-    img = Image.new('RGB', (696, 991), color = (255, 255, 255))
     fnt = ImageFont.truetype('FreeMonoBold.ttf', 60)
-    d = ImageDraw.Draw(img)
-    d.text((10,img_qr.size[1]), "ID: ", font=fnt, fill=(0,0,0))
 
-    d.text((10, 700), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
-    d.text((10, 800), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
+    img_txt = Image.new('RGB', (700, 696), color = (255, 255, 255))
+    d = ImageDraw.Draw(img_txt)
+    d.text((10, 10 ), "ID: ", font=fnt, fill=(0,0,0))
+    d.text((10, 110), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
+    d.text((10, 210), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
+    d.text((10, 310), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
+
+    img = Image.new('RGB', (696, 991), color = (255, 255, 255))
+
+    d_id = ImageDraw.Draw(img)
+    d_id.text((330, 110 ), "ID: ", font=fnt, fill=(0,0,0))
 
     img.paste(img_qr, (0,0))
+    img.paste(img_txt.rotate(-90), (0,320))
 
     img.save('./img/pil_text.png')
 
