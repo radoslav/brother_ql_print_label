@@ -14,7 +14,7 @@ LABEL_WIDTH = config['printer']['width']
 def index():
     return 'Obsługa drukarek etykiet brother'
 
-# curl --header "Content-Type: application/json" --request POST --data '{"id":1}' http://127.0.0.1:5000/api/preview
+# curl --header "Content-Type: application/json" --request POST --data '{"id":1, "supplier_name": "igepa", "print_material_type": "baner", "print_material": "frontlight", "url": "http://google.pl"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
 
