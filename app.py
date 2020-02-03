@@ -29,22 +29,23 @@ def preview():
     img_qr = qr.make_image()
 
     fnt = ImageFont.truetype('FreeMonoBold.ttf', 60)
-    fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 80)
+    fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 84)
 
-    img_txt = Image.new('RGB', (700, 696), color = (255, 255, 255))
+    img_txt = Image.new('RGB', (900, 696), color = (255, 255, 255))
+    d_offset = 60
     d = ImageDraw.Draw(img_txt)
-    d.text((10, 10 ), "ID: ", font=fnt_bigger, fill=(0,0,0))
-    d.text((10, 160), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
-    d.text((10, 310), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
-    d.text((10, 450), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, d_offset ), "ID: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, d_offset + 150), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, d_offset + 300), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, d_offset + 450), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
 
-    img = Image.new('RGB', (696, 991), color = (255, 255, 255))
+    img = Image.new('RGB', (696, 1200), color = (255, 255, 255))
 
     d_id = ImageDraw.Draw(img)
-    d_id.text((330, 110 ), "ID: ", font=fnt, fill=(0,0,0))
+    d_id.text((10, 150 ), "ID: ", font=fnt, fill=(0,0,0))
 
-    img.paste(img_qr, (0,0))
-    img.paste(img_txt.rotate(-90), (0,320))
+    img.paste(img_qr, (350,0))
+    img.paste(img_txt.rotate(-90, expand=1), (0,320))
 
     img.save('./img/pil_text.png')
 
