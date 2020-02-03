@@ -29,13 +29,14 @@ def preview():
     img_qr = qr.make_image()
 
     fnt = ImageFont.truetype('FreeMonoBold.ttf', 60)
+    fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 80)
 
     img_txt = Image.new('RGB', (700, 696), color = (255, 255, 255))
     d = ImageDraw.Draw(img_txt)
-    d.text((10, 10 ), "ID: ", font=fnt, fill=(0,0,0))
-    d.text((10, 110), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
-    d.text((10, 210), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
-    d.text((10, 310), "fdfsdfsdf: ", font=fnt, fill=(0,0,0))
+    d.text((10, 10 ), "ID: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, 160), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, 310), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
+    d.text((10, 450), "fdfsdfsdf: ", font=fnt_bigger, fill=(0,0,0))
 
     img = Image.new('RGB', (696, 991), color = (255, 255, 255))
 
