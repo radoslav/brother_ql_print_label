@@ -4,6 +4,7 @@ import yaml
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 import json
+import re
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ LABEL_WIDTH = config['printer']['width']
 def index():
     return 'Obsługa drukarek etykiet brother'
 
-# curl --header "Content-Type: application/json" --request POST --data '{"id":1, "supplier_name": "igepa", "print_material_type": "baner", "print_material": "frontlight", "url": "http://google.pl"}' http://127.0.0.1:5000/api/preview
+# curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
 
@@ -50,12 +51,12 @@ def create_label(label):
     d_offset = 60
     d = ImageDraw.Draw(img_txt)
     d.text((10, d_offset), 'id: ' + str(label.id), font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 150), label.supplier_name,
+    d.text((10, d_offset + 130), label.supplier_name,
            font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 300), label.print_material_type,
+    d.text((10, d_offset + 260), label.print_material_type,
            font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 450), label.print_material,
-           font=fnt_bigger, fill=(0, 0, 0))
+    d.text((10, d_offset + 390), re.sub("(.{20})", "\\1\n", label.print_material, 0, re.DOTALL),
+           font=fnt, fill=(0, 0, 0))
 
     img = Image.new('RGB', (696, 1200), color=(255, 255, 255))
 
@@ -63,8 +64,8 @@ def create_label(label):
     d_id.text((40, 50), 'ID: ', font=fnt, fill=(0, 0, 0))
     d_id.text((40, 150), str(label.id), font=fnt, fill=(0, 0, 0))
 
-    img.paste(img_qr, (350, 0))
-    img.paste(img_txt.rotate(-90, expand=1), (0, 320))
+    img.paste(img_qr, (300, 0))
+    img.paste(img_txt.rotate(-90, expand=1), (0, 400))
 
     return img
 
