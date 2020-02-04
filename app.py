@@ -13,7 +13,6 @@ BROTHER_QL_PRINTER = config['printer']['model']
 BROTHER_QL_MODEL = config['printer']['connection']
 LABEL_WIDTH = config['printer']['width']
 
-
 @app.route('/')
 def index():
     return 'Obsługa drukarek etykiet brother'
