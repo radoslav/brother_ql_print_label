@@ -24,8 +24,20 @@ def preview():
     req = request.get_json()
     print(req)
 
-    label = jsonToLabel(request.get_json())
+    label_data = jsonToLabel(request.get_json())
+    label = label_copy(label_data)
+    label.save('./img/test.png')
 
+    return "ok", 200
+
+def label_copy(label):
+    img = create_label(label)
+    img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))
+    img_2_labels.paste(img, (0, 0))
+    img_2_labels.paste(img, (0, 1200))
+    return img_2_labels
+
+def create_label(label):
     qr = qrcode.QRCode(box_size=10)
     qr.add_data(label.url)
     qr.make()
@@ -54,9 +66,7 @@ def preview():
     img.paste(img_qr, (350, 0))
     img.paste(img_txt.rotate(-90, expand=1), (0, 320))
 
-    img.save('./img/pil_text.png')
-
-    return "ok", 200
+    return img
 
 def jsonToLabel(json):
     label = Label
