@@ -8,4 +8,4 @@ https://github.com/splitbrain/bql-label-printer
 
 # run app
   export FLASK_APP=app.py
-  pipenv run flask run
+  pipenv run flask run --host=0.0.0.0
