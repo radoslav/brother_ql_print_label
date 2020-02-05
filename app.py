@@ -1,9 +1,13 @@
 from flask import Flask
 from flask import request
-import yaml
-import qrcode
-from PIL import Image, ImageDraw, ImageFont
+
 import json
+import yaml
+
+import qrcode
+
+from PIL import Image, ImageDraw, ImageFont
+
 import re
 
 app = Flask(__name__)
