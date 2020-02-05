@@ -10,6 +10,12 @@ from PIL import Image, ImageDraw, ImageFont
 
 import re
 
+from brother_ql.devicedependent import models, label_type_specs, label_sizes
+# from brother_ql.devicedependent import ENDLESS_LABEL, DIE_CUT_LABEL, ROUND_DIE_CUT_LABEL
+from brother_ql import BrotherQLRaster, create_label
+from brother_ql.backends import backend_factory, guess_backend
+
+
 class Printer:
     """
     Custom Printer Class
@@ -39,15 +45,16 @@ class Label:
     def __str__(self):
         return self.id
 
+
 def label_copy(label):
-    img = create_label(label)
+    img = label_img(label)
     img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))
     img_2_labels.paste(img, (0, 0))
     img_2_labels.paste(img, (0, 1200))
     return img_2_labels
 
 
-def create_label(label):
+def label_img(label):
     qr = qrcode.QRCode(box_size=10)
     qr.add_data(label.url)
     qr.make()
@@ -89,6 +96,7 @@ def jsonToLabel(json):
     label.url = json.get('url')
     return label
 
+
 def yaml_to_printer():
     config_file = open('config.yaml', 'r')
     config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -98,23 +106,47 @@ def yaml_to_printer():
     printer.width = config['printer']['width']
     return printer
 
+
 def image_to_png_bytes(im):
     image_buffer = BytesIO()
     im.save(image_buffer, format="PNG")
     image_buffer.seek(0)
     return image_buffer.read()
 
+
 app = Flask(__name__)
 
 printer = yaml_to_printer()
+
+selected_backend = guess_backend(printer.connection)
+BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 @app.route('/')
 def index():
     return 'Obsługa drukarek etykiet brother'
 
+
 @app.route("/api/print", methods=["POST"])
 def print():
-    return "ok", 200
+    label_data = jsonToLabel(request.get_json())
+    image = label_img(label_data)
+
+    qlr = BrotherQLRaster(printer.model)
+    ls = label_type_specs[label_sizes(62)]
+    # from brother_ql
+    create_label(qlr, image, ls, threshold=70, cut=True, dither=False, compress=False, red=False)
+
+    return_dict = {'success': False}
+
+    try:
+        be = BACKEND_CLASS(printer.connection)
+        be.write(qlr.data)
+        be.dispose()
+        del be
+    except Exception as e:
+        return_dict['message'] = str(e)
+
+    return return_dict, 200
 
 # curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
