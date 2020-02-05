@@ -131,9 +131,9 @@ def print():
     label_data = jsonToLabel(request.get_json())
     image = label_img(label_data)
 
+    # from brother_ql
     qlr = BrotherQLRaster(printer.model)
     ls = label_type_specs[label_sizes(62)]
-    # from brother_ql
     create_label(qlr, image, ls, threshold=70, cut=True, dither=False, compress=False, red=False)
 
     return_dict = {'success': False}
