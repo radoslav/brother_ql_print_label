@@ -69,6 +69,12 @@ def yaml_to_printer():
     printer.width = config['printer']['width']
     return printer
 
+def image_to_png_bytes(im):
+    image_buffer = BytesIO()
+    im.save(image_buffer, format="PNG")
+    image_buffer.seek(0)
+    return image_buffer.read()
+
 class Printer:
     """
     Custom Printer Class
@@ -108,7 +114,7 @@ def index():
 
 @app.route("/api/print", methods=["POST"])
 def print():
-    
+
 
 # curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
