@@ -10,6 +10,35 @@ from PIL import Image, ImageDraw, ImageFont
 
 import re
 
+class Printer:
+    """
+    Custom Printer Class
+    """
+
+    def __init__(self, model, connection, width):
+        self.model = model
+        self.connection = connection
+        self.width = width
+
+    def __str__(self):
+        return self.model
+
+
+class Label:
+    """
+    Custom Label Class
+    """
+
+    def __init__(self, id, supplier_name, print_material_type, print_material, url):
+        self.id = id
+        self.supplier_name = supplier_name
+        self.print_material_type = print_material_type
+        self.print_material = print_material
+        self.url = url
+
+    def __str__(self):
+        return self.id
+
 def label_copy(label):
     img = create_label(label)
     img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))
@@ -75,35 +104,6 @@ def image_to_png_bytes(im):
     image_buffer.seek(0)
     return image_buffer.read()
 
-class Printer:
-    """
-    Custom Printer Class
-    """
-
-    def __init__(self, model, connection, width):
-        self.model = model
-        self.connection = connection
-        self.width = width
-
-    def __str__(self):
-        return self.model
-
-
-class Label:
-    """
-    Custom Label Class
-    """
-
-    def __init__(self, id, supplier_name, print_material_type, print_material, url):
-        self.id = id
-        self.supplier_name = supplier_name
-        self.print_material_type = print_material_type
-        self.print_material = print_material
-        self.url = url
-
-    def __str__(self):
-        return self.id
-
 app = Flask(__name__)
 
 printer = yaml_to_printer()
@@ -114,14 +114,11 @@ def index():
 
 @app.route("/api/print", methods=["POST"])
 def print():
-
+    return "ok", 200
 
 # curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
-
-    req = request.get_json()
-    print(req)
 
     label_data = jsonToLabel(request.get_json())
     label = label_copy(label_data)
