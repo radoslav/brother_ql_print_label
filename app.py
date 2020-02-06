@@ -135,8 +135,8 @@ def print():
 
     # from brother_ql
     qlr = BrotherQLRaster(printer.model)
-    ls = label_type_specs[label_sizes(62)]
-    create_label(qlr, image, ls, threshold=70, cut=True, dither=False, compress=False, red=False)
+    
+    create_label(qlr, image, printer.width, threshold=70, cut=True, dither=False, compress=False, red=False)
 
     return_dict = {'success': False}
 

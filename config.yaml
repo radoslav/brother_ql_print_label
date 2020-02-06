@@ -1,4 +1,4 @@
 printer:
   model: "QL-700"
   connection: "usb://04f9:2042"
-  width: 62
+  width: "62"
