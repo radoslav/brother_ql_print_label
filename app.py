@@ -19,6 +19,9 @@ from brother_ql.backends import backend_factory, guess_backend
 
 import usb.core
 
+from queue import Queue
+q = Queue()
+
 class Printer:
     """
     Custom Printer Class
@@ -140,12 +143,15 @@ BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 @app.route('/')
 def index():
-    return '<h1>Obsługa drukarek etykiet brother</h1> Czy drukarka włączona: ' + str(is_printer_on(printer))
+    return '<h1>Obsługa drukarek etykiet brother</h1> Czy drukarka włączona: ' + str(is_printer_on(printer)) + "<br />W kolejce do druku: " + str(q.qsize())
 
 
 @app.route("/api/print", methods=["POST"])
 def print():
     label_data = jsonToLabel(request.get_json())
+
+    q.put(label_data)
+
     image = label_img(label_data)
 
     # from brother_ql
