@@ -17,16 +17,19 @@ from brother_ql.devicedependent import models, label_type_specs, label_sizes
 from brother_ql import BrotherQLRaster, create_label
 from brother_ql.backends import backend_factory, guess_backend
 
+import usb.core
 
 class Printer:
     """
     Custom Printer Class
     """
 
-    def __init__(self, model, connection, width):
+    def __init__(self, model, connection, width, idVendor, idProduct):
         self.model = model
         self.connection = connection
         self.width = width
+        self.idVendor = idVendor
+        self.idProduct = idProduct
 
     def __str__(self):
         return self.model
@@ -106,6 +109,12 @@ def yaml_to_printer():
     printer.model = config['printer']['model']
     printer.connection = config['printer']['connection']
     printer.width = config['printer']['width']
+
+    array_id = re.findall("[0-9a-fA-F]{4}", printer.connection)
+    if array_id:
+        printer.idVendor = array_id[0]
+        printer.idProduct = array_id[1]
+
     return printer
 
 
