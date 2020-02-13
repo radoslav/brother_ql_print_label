@@ -20,7 +20,8 @@ from brother_ql.backends import backend_factory, guess_backend
 import usb.core
 
 from queue import Queue
-q = Queue()
+import threading
+import time
 
 class Printer:
     """
@@ -141,13 +142,23 @@ printer = yaml_to_printer()
 selected_backend = guess_backend(printer.connection)
 BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
+q = Queue()
+
+def printer_worker(logger):
+    while True:
+        time.sleep(1)
+        logger.warning('Starting of thread :')
+
+printer_th = threading.Thread(target=printer_worker(app.logger), name='Deamon', daemon=True)
+printer_th.start
+
 @app.route('/')
 def index():
     return '<h1>Obsługa drukarek etykiet brother</h1> Czy drukarka włączona: ' + str(is_printer_on(printer)) + "<br />W kolejce do druku: " + str(q.qsize())
 
 
 @app.route("/api/print", methods=["POST"])
-def print():
+def api_print():
     label_data = jsonToLabel(request.get_json())
 
     q.put(label_data)
