@@ -25,6 +25,13 @@ import time
 import redis
 from rq import Queue
 
+app = Flask(__name__)
+
+r = redis.Redis()
+q = Queue(connection=r)
+
+from app import views
+
 class Printer:
     """
     Custom Printer Class
@@ -142,10 +149,6 @@ printer = yaml_to_printer()
 selected_backend = guess_backend(printer.connection)
 BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
-app = Flask(__name__)
-
-r = redis.Redis()
-q = Queue(connection=r)
 
 def background_task(n):
 
