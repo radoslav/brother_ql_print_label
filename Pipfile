@@ -12,6 +12,8 @@ pyyaml = "*"
 qrcode = "*"
 pillow = "*"
 brother-ql = "*"
+redis = "*"
+rq = "*"
 
 [requires]
 python_version = "3.7"
