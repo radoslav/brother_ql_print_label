@@ -4,6 +4,8 @@ from app import q
 
 from flask import render_template, request
 
+import json
+from app import models
 
 @app.route('/')
 def index():

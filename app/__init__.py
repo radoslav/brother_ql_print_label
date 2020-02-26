@@ -1,6 +1,5 @@
 from flask import Flask
 
-import json
 import yaml
 
 import qrcode
@@ -31,7 +30,7 @@ r = redis.Redis()
 q = Queue(connection=r)
 
 from app import views
-from app import models
+from app.models import Printer, Label
 
 def label_copy(label):
     img = label_img(label)

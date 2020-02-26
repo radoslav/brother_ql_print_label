@@ -1,3 +1,4 @@
+from app import app
 class Printer:
     """
     Custom Printer Class
