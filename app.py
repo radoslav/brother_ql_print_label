@@ -20,9 +20,11 @@ from brother_ql.backends import backend_factory, guess_backend
 
 import usb.core
 
-from queue import Queue
-import threading
 import time
+
+# redis and rq for queue
+import redis
+from rq import Queue
 
 class Printer:
     """
@@ -136,22 +138,42 @@ def is_printer_on(printer):
     else:
             return False
 
-app = Flask(__name__)
-
 printer = yaml_to_printer()
 
 selected_backend = guess_backend(printer.connection)
 BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
-q = Queue()
+app = Flask(__name__)
 
-def printer_worker(logger):
-    while True:
-        time.sleep(1)
-        logger.warning('Starting of thread :')
+r = redis.Redis()
+q = Queue(connection=r)
 
-printer_th = threading.Thread(target=printer_worker(app.logger), name='Deamon', daemon=True)
-printer_th.start
+def background_task(n):
+
+    """ Function that returns len(n) and simulates a delay """
+
+    delay = 2
+
+    print("Task running")
+    print(f"Simulating a {delay} second delay")
+
+    time.sleep(delay)
+
+    print(len(n))
+    print("Task complete")
+
+    return len(n)
+
+@app.route("/task")
+def task():
+
+    if request.args.get("n"):
+
+        job = q.enqueue(background_task, request.args.get("n"))
+
+        return f"Task ({job.id}) added to queue at {job.enqueued_at}"
+
+    return "No value for count provided"
 
 @app.route('/')
 def index():
@@ -161,8 +183,6 @@ def index():
 @app.route("/api/print", methods=["POST"])
 def api_print():
     label_data = jsonToLabel(request.get_json())
-
-    q.put(label_data)
 
     image = label_img(label_data)
 
