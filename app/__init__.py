@@ -1,5 +1,4 @@
 from flask import Flask
-from flask import request
 
 import json
 import yaml
@@ -164,51 +163,3 @@ def background_task(n):
 
     return len(n)
 
-@app.route("/task")
-def task():
-
-    if request.args.get("n"):
-
-        job = q.enqueue(background_task, request.args.get("n"))
-
-        return f"Task ({job.id}) added to queue at {job.enqueued_at}"
-
-    return "No value for count provided"
-
-@app.route('/')
-def index():
-    return '<h1>Obsługa drukarek etykiet brother</h1> Czy drukarka włączona: ' + str(is_printer_on(printer)) + "<br />W kolejce do druku: " + str(q.qsize())
-
-
-@app.route("/api/print", methods=["POST"])
-def api_print():
-    label_data = jsonToLabel(request.get_json())
-
-    image = label_img(label_data)
-
-    # from brother_ql
-    qlr = BrotherQLRaster(printer.model)
-    
-    create_label(qlr, image, printer.width, threshold=70, cut=True, dither=False, compress=False, red=False)
-
-    return_dict = {'success': False}
-
-    try:
-        be = BACKEND_CLASS(printer.connection)
-        be.write(qlr.data)
-        be.dispose()
-        del be
-    except Exception as e:
-        return_dict['message'] = str(e)
-
-    return return_dict, 200
-
-# curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
-@app.route("/api/preview", methods=["POST"])
-def preview():
-
-    label_data = jsonToLabel(request.get_json())
-    label = label_copy(label_data)
-    label.save('./img/test.png')
-
-    return "ok", 200
