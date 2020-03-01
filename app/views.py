@@ -11,17 +11,6 @@ from app import models
 def index():
     return render_template("index.html")
 
-@app.route("/task")
-def task():
-
-    if request.args.get("n"):
-
-        job = q.enqueue(background_task, request.args.get("n"))
-
-        return f"Task ({job.id}) added to queue at {job.enqueued_at}"
-
-    return "No value for count provided"
-
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
