@@ -1,2 +1,4 @@
 .vscode
 img
+.idea/
+app/__pycache__/
