@@ -1,11 +1,19 @@
+from brother_ql import BrotherQLRaster, create_label
+
 from app import app
 from app import r
 from app import q
 
 from flask import render_template, request
 
-import json
-from app import models
+from app.printing import jsonToLabel, label_img, label_copy
+
+from app.printing import yaml_to_printer
+from brother_ql.backends import backend_factory, guess_backend
+
+printer = yaml_to_printer()
+selected_backend = guess_backend(printer.connection)
+BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 @app.route('/')
 def index():
@@ -20,7 +28,7 @@ def api_print():
 
     # from brother_ql
     qlr = BrotherQLRaster(printer.model)
-    
+
     create_label(qlr, image, printer.width, threshold=70, cut=True, dither=False, compress=False, red=False)
 
     return_dict = {'success': False}
@@ -35,10 +43,16 @@ def api_print():
 
     return return_dict, 200
 
+
+@app.route("/api", methods=["GET"])
+def api():
+
+    return "ok", 200
+
 # curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
-
+    app.logger.warning("dsdsds")
     label_data = jsonToLabel(request.get_json())
     label = label_copy(label_data)
     label.save('./app/img/test.png')

@@ -1,4 +1,4 @@
 .vscode
-img
+app/img/
 .idea/
 app/__pycache__/
