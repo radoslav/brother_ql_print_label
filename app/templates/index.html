@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h5 class="mt-3 mb-3">Job queue</h5>
+                <h5 class="mt-3 mb-3">Job queue: {{ q_len }}</h5>
                 {% if jobs %}
                 {% for job in jobs %}
                 <div class="card mb-3">

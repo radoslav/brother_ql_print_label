@@ -10,14 +10,17 @@ from app.printing import jsonToLabel, label_img, label_copy
 from app.printing import yaml_to_printer
 from brother_ql.backends import backend_factory, guess_backend
 
+from app.print_task import print_task
+
 printer = yaml_to_printer()
 selected_backend = guess_backend(printer.connection)
 BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 @app.route('/')
 def index():
+    q_len = len(q)
     jobs = q.jobs
-    return render_template("index.html")
+    return render_template("index.html", jobs=jobs, q_len=q_len)
 
 
 @app.route("/api/print", methods=["POST"])
@@ -56,5 +59,10 @@ def preview():
     label_data = jsonToLabel(request.get_json())
     label = label_copy(label_data)
     label.save('./app/img/test.png')
+
+    task = q.enqueue(print_task)
+
+    message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
+    print(message)
 
     return "ok", 200
