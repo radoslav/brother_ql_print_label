@@ -1,7 +1,6 @@
 from brother_ql import BrotherQLRaster, create_label
 
 from app import app
-from app import r
 from app import q
 
 from flask import render_template, request
@@ -17,6 +16,7 @@ BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 @app.route('/')
 def index():
+    jobs = q.jobs
     return render_template("index.html")
 
 
