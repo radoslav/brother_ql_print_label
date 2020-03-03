@@ -60,7 +60,7 @@ def preview():
     label = label_copy(label_data)
     label.save('./app/img/test.png')
 
-    task = q.enqueue(print_task)
+    task = q.enqueue(print_task, label_data, description='test')
 
     message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
     print(message)
