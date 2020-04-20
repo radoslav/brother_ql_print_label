@@ -6,6 +6,11 @@ https://github.com/pklaus/brother_ql_web
 
 https://github.com/splitbrain/bql-label-printer
 
+## flask qr
+
+  https://testdriven.io/blog/asynchronous-tasks-with-flask-and-redis-queue/
+  https://github.com/mjhea0/flask-redis-queue
+
 ## run app
   export FLASK_APP=app.py
   pipenv run flask run --host=0.0.0.0
