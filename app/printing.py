@@ -1,5 +1,3 @@
-import yaml
-
 import qrcode
 
 from PIL import Image, ImageDraw, ImageFont
@@ -9,13 +7,14 @@ from app.models import Printer, Label
 
 from io import BytesIO
 
-import brother_ql.models  
+import brother_ql.models
 import brother_ql.labels
 # from brother_ql.devicedependent import ENDLESS_LABEL, DIE_CUT_LABEL, ROUND_DIE_CUT_LABEL
 from brother_ql import BrotherQLRaster, create_label
 from brother_ql.backends import backend_factory, guess_backend
 
 import usb.core
+
 
 def label_copy(label):
     img = label_img(label)
@@ -68,31 +67,16 @@ def jsonToLabel(json):
     return label
 
 
-def yaml_to_printer():
-    config_file = open('config.yaml', 'r')
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
-    printer = Printer
-    printer.model = config['printer']['model']
-    printer.connection = config['printer']['connection']
-    printer.width = config['printer']['width']
-
-    array_id = re.findall("[0-9a-fA-F]{4}", printer.connection)
-    if array_id:
-        printer.idVendor = array_id[0]
-        printer.idProduct = array_id[1]
-
-    return printer
-
-
 def image_to_png_bytes(im):
     image_buffer = BytesIO()
     im.save(image_buffer, format="PNG")
     image_buffer.seek(0)
     return image_buffer.read()
 
+
 def is_printer_on(printer):
     dev = usb.core.find(idVendor=printer.idVendor, idProduct=printer.idProduct)
     if dev:
         return True
     else:
-            return False
+        return False
