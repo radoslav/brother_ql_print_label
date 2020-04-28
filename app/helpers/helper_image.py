@@ -36,6 +36,13 @@ def img_label(label):
 
     return img
 
+def create_imgs_from_labels(labels):
+    imgs = []
+    for label in labels:
+        img = img_label(label)
+        imgs.append(img)
+    return imgs
+
 def img_label_2_copies(label):
     img = img_label(label)
     img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))

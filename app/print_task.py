@@ -1,22 +1,11 @@
 import time
 
-from app.helpers.helper_image import img_label
-
 
 def print_task(label):
     time.sleep(5)
 
     # raise NameError('HiThere')
     return True
-
-
-def create_imgs_from_labels(labels):
-    imgs = []
-    for label in labels:
-        img = img_label(label)
-        imgs.append(img)
-    return imgs
-
 
 #
 # def send_img_to_printer(printer, img):

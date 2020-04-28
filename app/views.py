@@ -6,13 +6,13 @@ from app import q
 from flask import render_template, request
 
 from app.helpers.helper_config import yaml_to_printer
-from app.helpers.helper_image import img_label
+from app.helpers.helper_image import img_label, create_imgs_from_labels
 from app.helpers.helper_json import jsonToLabels
 from app.helpers.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
 
-from app.print_task import print_task, create_imgs_from_labels
+from app.print_task import print_task
 
 printer = yaml_to_printer()
 
