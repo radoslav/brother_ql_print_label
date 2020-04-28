@@ -1,7 +1,7 @@
 from app.models import Label
 
 
-def jsonToLabel(json):
+def jsonToLabels(json):
     labels = []
     for item in json:
         label = Label

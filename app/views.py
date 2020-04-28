@@ -7,7 +7,7 @@ from flask import render_template, request
 
 from app.helpers.helper_config import yaml_to_printer
 from app.helpers.helper_image import img_label, img_label_2_copies
-from app.helpers.helper_json import jsonToLabel
+from app.helpers.helper_json import jsonToLabels
 from app.helpers.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
@@ -36,7 +36,7 @@ def printer_on():
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
-    label_data = jsonToLabel(request.get_json())
+    label_data = jsonToLabels(request.get_json())
 
     image = img_label(label_data)
 
@@ -61,13 +61,14 @@ def api_print():
 @app.route("/api/preview", methods=["POST"])
 def preview():
     app.logger.warning("dsdsds")
-    label_data = jsonToLabel(request.get_json())[0]
-    img = img_label(label_data)
-    img.save('./app/img/test.png')
+    labels = jsonToLabels(request.get_json())
 
-    task = q.enqueue(print_task, label_data, description='test')
+    for i, label in enumerate(labels):
+        img = img_label(label)
+        img.save('./app/img/test_copy_'+str(i)+'.png')
 
-    message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
-    print(message)
+        task = q.enqueue(print_task, label, description='test')
+        message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
+        print(message)
 
     return "ok", 200
