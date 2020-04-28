@@ -57,13 +57,13 @@ def api_print():
 
     return return_dict, 200
 
-# curl --header "Content-Type: application/json" --request POST --data '{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463"}' http://127.0.0.1:5000/api/preview
+# curl --header "Content-Type: application/json" --request POST --data '[{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463", "copies":2}]' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
     app.logger.warning("dsdsds")
-    label_data = jsonToLabel(request.get_json())
-    label = img_label_2_copies(label_data)
-    label.save('./app/img/test.png')
+    label_data = jsonToLabel(request.get_json())[0]
+    img = img_label(label_data)
+    img.save('./app/img/test.png')
 
     task = q.enqueue(print_task, label_data, description='test')
 
