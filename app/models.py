@@ -19,12 +19,13 @@ class Label:
     Custom Label Class
     """
 
-    def __init__(self, id, supplier_name, print_material_type, print_material, url):
+    def __init__(self, id, supplier_name, print_material_type, print_material, url, copies):
         self.id = id
         self.supplier_name = supplier_name
         self.print_material_type = print_material_type
         self.print_material = print_material
         self.url = url
+        self.copies = copies
 
     def __str__(self):
         return self.id
