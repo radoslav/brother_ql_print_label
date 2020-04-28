@@ -5,10 +5,10 @@ from app import q
 
 from flask import render_template, request
 
-from app.helper_config import yaml_to_printer
-from app.helper_image import img_label, img_label_2_copies
-from app.helper_json import jsonToLabel
-from app.helper_printing import is_printer_on
+from app.helpers.helper_config import yaml_to_printer
+from app.helpers.helper_image import img_label, img_label_2_copies
+from app.helpers.helper_json import jsonToLabel
+from app.helpers.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
 
