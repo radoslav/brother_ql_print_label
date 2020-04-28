@@ -1,20 +1,10 @@
-import qrcode
-
-from PIL import Image, ImageDraw, ImageFont
-
 import re
-from app.models import Printer, Label
-
 from io import BytesIO
 
-import brother_ql.models
-import brother_ql.labels
-# from brother_ql.devicedependent import ENDLESS_LABEL, DIE_CUT_LABEL, ROUND_DIE_CUT_LABEL
-from brother_ql import BrotherQLRaster, create_label
-from brother_ql.backends import backend_factory, guess_backend
+import qrcode
+from PIL import Image, ImageDraw, ImageFont
 
-import usb.core
-
+from app.models import Label
 
 def label_copy(label):
     img = label_img(label)
@@ -72,11 +62,3 @@ def image_to_png_bytes(im):
     im.save(image_buffer, format="PNG")
     image_buffer.seek(0)
     return image_buffer.read()
-
-
-def is_printer_on(printer):
-    dev = usb.core.find(idVendor=printer.idVendor, idProduct=printer.idProduct)
-    if dev:
-        return True
-    else:
-        return False

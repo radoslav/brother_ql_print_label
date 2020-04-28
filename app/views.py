@@ -6,7 +6,8 @@ from app import q
 from flask import render_template, request
 
 from app.helper_config import yaml_to_printer
-from app.printing import jsonToLabel, label_img, label_copy, is_printer_on
+from app.helper_image import jsonToLabel, label_img, label_copy
+from app.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
 
