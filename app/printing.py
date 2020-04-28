@@ -1,5 +1,3 @@
-from app import app
-
 import yaml
 
 import qrcode

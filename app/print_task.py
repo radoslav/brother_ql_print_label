@@ -1,5 +1,3 @@
-from app import app
-
 import time
 
 def print_task(label_data):
