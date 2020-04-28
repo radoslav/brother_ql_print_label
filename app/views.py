@@ -6,7 +6,8 @@ from app import q
 from flask import render_template, request
 
 from app.helper_config import yaml_to_printer
-from app.helper_image import jsonToLabel, label_img, label_copy
+from app.helper_image import img_label, img_label_2_copies
+from app.helper_json import jsonToLabel
 from app.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
@@ -37,7 +38,7 @@ def printer_on():
 def api_print():
     label_data = jsonToLabel(request.get_json())
 
-    image = label_img(label_data)
+    image = img_label(label_data)
 
     # from brother_ql
     qlr = BrotherQLRaster(printer.model)
@@ -61,7 +62,7 @@ def api_print():
 def preview():
     app.logger.warning("dsdsds")
     label_data = jsonToLabel(request.get_json())
-    label = label_copy(label_data)
+    label = img_label_2_copies(label_data)
     label.save('./app/img/test.png')
 
     task = q.enqueue(print_task, label_data, description='test')

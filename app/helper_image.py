@@ -4,17 +4,7 @@ from io import BytesIO
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 
-from app.models import Label
-
-def label_copy(label):
-    img = label_img(label)
-    img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))
-    img_2_labels.paste(img, (0, 0))
-    img_2_labels.paste(img, (0, 1200))
-    return img_2_labels
-
-
-def label_img(label):
+def img_label(label):
     qr = qrcode.QRCode(box_size=10)
     qr.add_data(label.url)
     qr.make()
@@ -46,18 +36,14 @@ def label_img(label):
 
     return img
 
+def img_label_2_copies(label):
+    img = img_label(label)
+    img_2_labels = Image.new('RGB', (696, 2400), color=(255, 255, 255))
+    img_2_labels.paste(img, (0, 0))
+    img_2_labels.paste(img, (0, 1200))
+    return img_2_labels
 
-def jsonToLabel(json):
-    label = Label
-    label.id = json.get('id')
-    label.supplier_name = json.get('supplier_name')
-    label.print_material_type = json.get('print_material_type')
-    label.print_material = json.get('print_material')
-    label.url = json.get('url')
-    return label
-
-
-def image_to_png_bytes(im):
+def img_to_png_bytes(im):
     image_buffer = BytesIO()
     im.save(image_buffer, format="PNG")
     image_buffer.seek(0)
