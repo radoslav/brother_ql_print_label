@@ -11,5 +11,10 @@ def jsonToLabels(json):
         label.print_material = item.get('print_material')
         label.url = item.get('url')
 
-        labels.append(label)
+        if item.get('copies'):
+            for i in range(item.get('copies')):
+                labels.append(label)
+        else:
+            labels.append(label)
+
     return labels
