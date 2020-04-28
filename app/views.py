@@ -6,13 +6,13 @@ from app import q
 from flask import render_template, request
 
 from app.helpers.helper_config import yaml_to_printer
-from app.helpers.helper_image import img_label, img_label_2_copies
+from app.helpers.helper_image import img_label
 from app.helpers.helper_json import jsonToLabels
 from app.helpers.helper_printing import is_printer_on
 
 from brother_ql.backends import backend_factory, guess_backend
 
-from app.print_task import print_task
+from app.print_task import print_task, create_imgs_from_labels
 
 printer = yaml_to_printer()
 
@@ -68,11 +68,11 @@ def preview():
     labels = jsonToLabels(request.get_json())
 
     if not is_printer_on(printer): # negation for testing
-        for i, label in enumerate(labels):
-            img = img_label(label)
+        imgs = create_imgs_from_labels(labels)
+        for i, img in enumerate(imgs):
             img.save('./app/img/test_copy_' + str(i) + '.png')
 
-            task = q.enqueue(print_task, label, description='test')
+            task = q.enqueue(print_task, img, description='test')
             message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
             print(message)
 
