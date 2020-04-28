@@ -1,7 +1,7 @@
 import time
 
-def print_task(label_data):
+def print_task(label):
     time.sleep(5)
 
-    raise NameError('HiThere')
+    # raise NameError('HiThere')
     return True
