@@ -18,8 +18,13 @@
 
 <h3 class="">Job queue: {{ q_len }}</h3>
 
-<div>
-    <button onClick="window.location.reload();">odśwież</button>
+<div class="input-group">
+    <div class="input-group-prepend">
+        <button class="btn btn-success" onClick="window.location.reload();">odśwież</button>
+    </div>
+    <form action="/api/failed_clear" method="post" class="">
+        <input type="submit" class="btn btn-danger" value="wyczyść failed"/>
+    </form>
 </div>
 
 <table class="table table-sm table-striped">

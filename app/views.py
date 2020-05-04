@@ -4,7 +4,7 @@ from rq.registry import FailedJobRegistry
 from app import app
 from app import q
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 
 from app.helpers.helper_config import yaml_to_printer
 from app.helpers.helper_image import img_label, create_imgs_from_labels
@@ -43,6 +43,14 @@ def api():
 @app.route("/api/printer_on", methods=["GET"])
 def printer_on():
     return str(is_printer_on(printer)), 200
+
+
+@app.route("/api/failed_clear", methods=["POST"])
+def failed_clear():
+    registry_failed = FailedJobRegistry(queue=q)
+    for job_id in registry_failed.get_job_ids():
+        registry_failed.remove(job_id, delete_job=True)
+    return redirect("/")
 
 
 @app.route("/api/print", methods=["POST"])
