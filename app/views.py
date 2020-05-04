@@ -39,9 +39,16 @@ def printer_on():
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
-    return_dict = {'success': False}
+    return_dict = {'success': False, 'print_material_ids': []}
     # check for printer on
     if not is_printer_on(printer): # negation for testing
+        # get labels
+        labels = jsonToLabels(request.get_json())
+
+        # for each sent to queue
+        for label in labels:
+            q.enqueue(print_task, label, description=label.id)
+            return_dict['print_material_ids'].append(label.id)
 
         return_dict['message'] = 'printer online!'
         return_dict['success'] = True
