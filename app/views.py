@@ -1,4 +1,5 @@
 from brother_ql import BrotherQLRaster, create_label
+from rq.registry import FailedJobRegistry
 
 from app import app
 from app import q
@@ -24,7 +25,10 @@ BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 def index():
     q_len = len(q)
     jobs = q.jobs
-    return render_template("index.html", jobs=jobs, q_len=q_len)
+
+    failed = FailedJobRegistry(queue=q)
+
+    return render_template("index.html", jobs=jobs, q_len=q_len, failed_len=failed.count)
 
 
 @app.route("/api", methods=["GET"])

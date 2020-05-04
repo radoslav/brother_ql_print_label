@@ -49,6 +49,35 @@
     </tbody>
 </table>
 
+<h3 class="">Failed job queue: {{ failed_len }}</h3>
+
+<table class="table table-sm table-striped">
+    <thead class="">
+    <tr>
+        <th>id</th>
+        <th>status</th>
+        <th>result</th>
+        <th>w kolejce</th>
+    </tr>
+    </thead>
+    <tbody id="tasks">
+{#    {% if failed_jobs %}#}
+{#        {% for job in failed_jobs %}#}
+{#            <tr>#}
+{#                <td>{{ job.description }}</td>#}
+{#                <td>{{ job.status }}</td>#}
+{#                <td>{{ job.result }}</td>#}
+{#                <td>{{ job.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S') }}</td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    {% else %}#}
+{#        <tr>#}
+{#            <td colspan="4" class="text-center">Brak prac w kolejce</td>#}
+{#        </tr>#}
+{#    {% endif %}#}
+    </tbody>
+</table>
+
 <footer class="text-right">@radoslaw.brzozowski</footer>
 </body>
 
