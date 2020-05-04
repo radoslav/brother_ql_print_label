@@ -26,9 +26,13 @@ def index():
     q_len = len(q)
     jobs = q.jobs
 
-    failed = FailedJobRegistry(queue=q)
+    registry_failed = FailedJobRegistry(queue=q)
+    failed_jobs = []
+    for job_id in registry_failed.get_job_ids():
+        failed_jobs.append(q.fetch_job(job_id))
 
-    return render_template("index.html", jobs=jobs, q_len=q_len, failed_len=failed.count)
+    return render_template("index.html", jobs=jobs, q_len=q_len, failed_jobs=failed_jobs,
+                           failed_len=registry_failed.count)
 
 
 @app.route("/api", methods=["GET"])
@@ -45,7 +49,7 @@ def printer_on():
 def api_print():
     return_dict = {'success': False, 'print_material_ids': []}
     # check for printer on
-    if not is_printer_on(printer): # negation for testing
+    if not is_printer_on(printer):  # negation for testing
         # get labels
         labels = jsonToLabels(request.get_json())
 
@@ -66,7 +70,7 @@ def preview():
     app.logger.warning("dsdsds")
     labels = jsonToLabels(request.get_json())
 
-    if not is_printer_on(printer): # negation for testing
+    if not is_printer_on(printer):  # negation for testing
         imgs = create_imgs_from_labels(labels)
         for i, img in enumerate(imgs):
             img.save('./app/img/test_copy_' + str(i) + '.png')
