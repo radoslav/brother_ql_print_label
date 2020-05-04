@@ -39,24 +39,12 @@ def printer_on():
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
-    label_data = jsonToLabels(request.get_json())
-
-    image = img_label(label_data)
-
-    # from brother_ql
-    qlr = BrotherQLRaster(printer.model)
-
-    create_label(qlr, image, printer.width, threshold=70, cut=True, dither=False, compress=False, red=False)
-
     return_dict = {'success': False}
+    # check for printer on
+    if not is_printer_on(printer): # negation for testing
 
-    try:
-        be = BACKEND_CLASS(printer.connection)
-        be.write(qlr.data)
-        be.dispose()
-        del be
-    except Exception as e:
-        return_dict['message'] = str(e)
+        return_dict['message'] = 'printer online!'
+        return_dict['success'] = True
 
     return return_dict, 200
 

@@ -8,7 +8,12 @@ def print_task(label):
     return True
 
 #
-# def send_img_to_printer(printer, img):
+# @app.route("/api/print", methods=["POST"])
+# def api_print():
+#     label_data = jsonToLabels(request.get_json())
+#
+#     image = img_label(label_data)
+#
 #     # from brother_ql
 #     qlr = BrotherQLRaster(printer.model)
 #
