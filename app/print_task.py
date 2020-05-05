@@ -2,7 +2,7 @@ import time
 
 
 def print_task(label):
-    time.sleep(0)
+    time.sleep(2)
 
     raise NameError('HiThere')
     return True
