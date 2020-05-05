@@ -16,8 +16,6 @@
 <body>
 <h1>SPOOL drukarka etykiet brother:</h1>
 
-<h3 class="">Job queue: {{ q_len }}</h3>
-
 <div class="input-group">
     <div class="input-group-prepend">
         <button class="btn btn-success" onClick="window.location.reload();">odśwież</button>
@@ -26,6 +24,8 @@
         <input type="submit" class="btn btn-danger" value="wyczyść failed"/>
     </form>
 </div>
+
+<h3 class="">Job queue: {{ q_len }}</h3>
 
 <table class="table table-sm table-striped">
     <thead class="">
@@ -53,11 +53,10 @@
     {% endif %}
     </tbody>
 </table>
-
 <h3 class="">Failed job queue: {{ failed_len }}</h3>
 
 <table class="table table-sm table-striped">
-    <thead class="">
+    <thead class="table-dark">
     <tr>
         <th>id</th>
         <th>status</th>
@@ -85,5 +84,4 @@
 
 <footer class="text-right">@radoslaw.brzozowski</footer>
 </body>
-
 </html>
