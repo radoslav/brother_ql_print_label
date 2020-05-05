@@ -54,6 +54,14 @@ def requeue():
         registry_failed.requeue(job_id)
     return redirect("/")
 
+@app.route("/api/queue_clear", methods=["POST"])
+def queue_clear():
+    q.empty()
+    # registry_failed = FailedJobRegistry(queue=q)
+    # for job_id in registry_failed.get_job_ids():
+    #     registry_failed.requeue(job_id)
+    return redirect("/")
+
 @app.route("/api/print", methods=["POST"])
 def api_print():
     return_dict = {'success': False, 'print_material_ids': []}
