@@ -72,7 +72,7 @@ def api_print():
 
         # for each sent to queue
         for label in labels:
-            q.enqueue(print_task, label, description=label.id, failure_ttl=30)
+            q.enqueue(print_task, label, description=label.id)
             return_dict['print_material_ids'].append(label.id)
 
         return_dict['message'] = 'printer online!'
