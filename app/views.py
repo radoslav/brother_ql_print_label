@@ -1,18 +1,13 @@
-from brother_ql import BrotherQLRaster, create_label
+from brother_ql.backends import backend_factory, guess_backend
+from flask import render_template, request, redirect
 from rq.registry import FailedJobRegistry
 
 from app import app
 from app import q
-
-from flask import render_template, request, redirect
-
 from app.helpers.helper_config import yaml_to_printer
-from app.helpers.helper_image import img_label, create_imgs_from_labels
+from app.helpers.helper_image import create_imgs_from_labels
 from app.helpers.helper_json import jsonToLabels
 from app.helpers.helper_printing import is_printer_on
-
-from brother_ql.backends import backend_factory, guess_backend
-
 from app.print_task import print_task
 
 printer = yaml_to_printer()
@@ -52,6 +47,12 @@ def failed_clear():
         registry_failed.remove(job_id, delete_job=True)
     return redirect("/")
 
+@app.route("/api/requeue", methods=["POST"])
+def requeue():
+    registry_failed = FailedJobRegistry(queue=q)
+    for job_id in registry_failed.get_job_ids():
+        registry_failed.requeue(job_id)
+    return redirect("/")
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
