@@ -92,10 +92,6 @@ def preview():
         for i, img in enumerate(imgs):
             img.save('./app/img/test_copy_' + str(i) + '.png')
 
-            task = q.enqueue(print_task, img, description='test')
-            message = f"Task queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}. {len(q)} jobs queued"
-            print(message)
-
         return "ok", 200
     else:
         return "drukarka not found", 404
