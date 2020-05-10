@@ -1,4 +1,3 @@
-from brother_ql.backends import backend_factory, guess_backend
 from flask import render_template, request, redirect
 from rq.registry import FailedJobRegistry
 
@@ -11,9 +10,6 @@ from app.helpers.helper_printing import is_printer_on
 from app.print_task import print_task
 
 printer = yaml_to_printer()
-
-selected_backend = guess_backend(printer.connection)
-BACKEND_CLASS = backend_factory(selected_backend)['backend_class']
 
 
 @app.route('/')
@@ -47,6 +43,7 @@ def failed_clear():
         registry_failed.remove(job_id, delete_job=True)
     return redirect("/")
 
+
 @app.route("/api/requeue", methods=["POST"])
 def requeue():
     registry_failed = FailedJobRegistry(queue=q)
@@ -54,13 +51,12 @@ def requeue():
         registry_failed.requeue(job_id)
     return redirect("/")
 
+
 @app.route("/api/queue_clear", methods=["POST"])
 def queue_clear():
     q.empty()
-    # registry_failed = FailedJobRegistry(queue=q)
-    # for job_id in registry_failed.get_job_ids():
-    #     registry_failed.requeue(job_id)
     return redirect("/")
+
 
 @app.route("/api/print", methods=["POST"])
 def api_print():
@@ -72,7 +68,7 @@ def api_print():
 
         # for each sent to queue
         for label in labels:
-            q.enqueue(print_task, label, description=label.id)
+            q.enqueue(print_task, printer, label, description=label.id)
             return_dict['print_material_ids'].append(label.id)
 
         return_dict['message'] = 'printer online!'
