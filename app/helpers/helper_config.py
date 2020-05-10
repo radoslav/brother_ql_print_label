@@ -8,7 +8,7 @@ from app.models import Printer
 def yaml_to_printer():
     config_file = open('config.yaml', 'r')
     config = yaml.load(config_file, Loader=yaml.FullLoader)
-    printer = Printer
+    printer = Printer()
     printer.model = config['printer']['model']
     printer.connection = config['printer']['connection']
     printer.width = config['printer']['width']
