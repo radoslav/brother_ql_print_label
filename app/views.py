@@ -83,11 +83,8 @@ def preview():
     app.logger.warning("dsdsds")
     labels = jsonToLabels(request.get_json())
 
-    if not is_printer_on(printer):  # negation for testing
-        imgs = create_imgs_from_labels(labels)
-        for i, img in enumerate(imgs):
-            img.save('./app/img/test_copy_' + str(i) + '.png')
+    imgs = create_imgs_from_labels(labels)
+    for i, img in enumerate(imgs):
+        img.save('./app/img/test_copy_' + str(i) + '.png')
 
-        return "ok", 200
-    else:
-        return "drukarka not found", 404
+    return "ok", 200
