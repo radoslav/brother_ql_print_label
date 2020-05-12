@@ -18,6 +18,63 @@ https://github.com/splitbrain/bql-label-printer
 ## run worker
   pipenv run python worker.py # or # pipenv run rq worker
 
+## run app ass service
+put services in 
+/etc/systemd/system/
+
+redis must by install
+  sudo apt install redis
+  
+### run webserver flask
+/etc/systemd/system/spooler-web.service
+```
+[Unit]
+Description=Spooler Web
+
+Requires=network.target
+After=network.target
+
+Requires=redis.service
+After=redis.service
+
+[Service]
+User=radoslav
+Group=radoslav
+WorkingDirectory=/home/radoslav/git/brother_ql_print_label
+Type=simple
+ExecStart=/home/radoslav/.local/bin/pipenv run flask run --host=0.0.0.0
+
+[Install]
+WantedBy=default.target
+```
+### run worker
+
+/etc/systemd/system/spooler-web-worker.service
+
+```
+[Unit]
+Description=Spooler Web Worker
+
+Requires=network.target
+After=network.target
+
+Requires=redis.service
+After=redis.service
+
+Requires=spooler-web.service
+After=spooler-web.service
+
+[Service]
+User=radoslav
+Group=radoslav
+WorkingDirectory=/home/radoslav/git/brother_ql_print_label
+Type=simple
+ExecStart=/home/radoslav/.local/bin/pipenv run python worker.py
+
+[Install]
+WantedBy=default.target
+```
+
 # default ops
 
 ```
