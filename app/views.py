@@ -62,7 +62,7 @@ def queue_clear():
 def api_print():
     return_dict = {'success': False, 'print_material_ids': []}
     # check for printer on
-    if is_printer_on(printer):  # negation for testing
+    if not is_printer_on(printer):  # negation for testing
         # get labels
         labels = jsonToLabels(request.get_json())
 
