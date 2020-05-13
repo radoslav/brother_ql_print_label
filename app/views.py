@@ -80,6 +80,8 @@ def api_print():
 # curl --header "Content-Type: application/json" --request POST --data '[{"id":1463, "supplier_name": "ENDUTEX", "print_material_type": "backlight", "print_material": "Vinyl BP (endutex) niezaciągający wody", "url": "http://192.168.1.100/warehouse_print_materials/1463", "copies":2}]' http://127.0.0.1:5000/api/preview
 @app.route("/api/preview", methods=["POST"])
 def preview():
+    return_dict = {'success': False, 'print_material_ids': []}
+
     app.logger.warning("dsdsds")
     labels = jsonToLabels(request.get_json())
 
@@ -87,4 +89,4 @@ def preview():
     for i, img in enumerate(imgs):
         img.save('./app/img/test_copy_' + str(i) + '.png')
 
-    return "ok", 200
+    return return_dict, 200

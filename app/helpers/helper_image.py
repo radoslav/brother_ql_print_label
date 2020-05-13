@@ -5,24 +5,29 @@ import qrcode
 from PIL import Image, ImageDraw, ImageFont
 
 def img_label(label):
+    width = '      ' if label.width is None else str(label.width)
+    grammage = '      ' if label.grammage_or_height is None else str(label.grammage_or_height)
+
     qr = qrcode.QRCode(box_size=10)
     qr.add_data(label.url)
     qr.make()
     img_qr = qr.make_image()
 
-    fnt = ImageFont.truetype('FreeMonoBold.ttf', 60)
-    fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 84)
+    fnt = ImageFont.truetype('FreeMonoBold.ttf', 56)
+    fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 76)
 
     img_txt = Image.new('RGB', (900, 696), color=(255, 255, 255))
     d_offset = 60
     d = ImageDraw.Draw(img_txt)
-    d.text((10, d_offset), 'id: ' + str(label.id),
+    d.text((5, d_offset), 'id: ' + str(label.id),
            font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 130), label.supplier_name,
+    d.text((10, d_offset + 90), label.supplier_name,
            font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 260), label.print_material_type,
+    d.text((10, d_offset + 180), label.print_material_type,
            font=fnt_bigger, fill=(0, 0, 0))
-    d.text((10, d_offset + 390), re.sub("(.{20})", "\\1\n", label.print_material, 0, re.DOTALL),
+    d.text((10, d_offset + 270), 's: '+width+' g: ' + grammage,
+           font=fnt, fill=(0, 0, 0))
+    d.text((10, d_offset + 360), re.sub("(.{20})", "\\1\n", label.print_material, 0, re.DOTALL),
            font=fnt, fill=(0, 0, 0))
 
     img = Image.new('RGB', (696, 1200), color=(255, 255, 255))

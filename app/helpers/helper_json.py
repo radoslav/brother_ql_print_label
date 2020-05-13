@@ -10,6 +10,8 @@ def jsonToLabels(json):
         label.print_material_type = item.get('print_material_type')
         label.print_material = item.get('print_material')
         label.url = item.get('url')
+        label.width = item.get('width')
+        label.grammage_or_height = item.get('grammage_or_height')
 
         if item.get('copies'):
             for i in range(item.get('copies')):
