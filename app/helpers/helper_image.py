@@ -14,6 +14,7 @@ def img_label(label):
     img_qr = qr.make_image()
 
     fnt = ImageFont.truetype('FreeMonoBold.ttf', 56)
+    fnt_2 = ImageFont.truetype('FreeMonoBold.ttf', 60)
     fnt_bigger = ImageFont.truetype('FreeMonoBold.ttf', 76)
 
     img_txt = Image.new('RGB', (900, 696), color=(255, 255, 255))
@@ -34,7 +35,7 @@ def img_label(label):
 
     d_id = ImageDraw.Draw(img)
     d_id.text((40, 50), 'ID: ', font=fnt, fill=(0, 0, 0))
-    d_id.text((40, 150), str(label.id), font=fnt, fill=(0, 0, 0))
+    d_id.text((40, 150), str(label.id), font=fnt_2, fill=(0, 0, 0))
 
     img.paste(img_qr, (300, 0))
     img.paste(img_txt.rotate(-90, expand=1), (0, 400))
